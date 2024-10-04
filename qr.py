@@ -102,7 +102,10 @@ components.html(f"""
             // Get network info
             if ('connection' in navigator) {{
                 let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                document.getElementById('network_info').innerHTML = `Effective Type: ${connection.effectiveType}, Downlink: ${connection.downlink} Mbps, RTT: ${connection.rtt} ms`;
+                document.getElementById('network_info').innerHTML = 
+                    "Effective Type: " + connection.effectiveType + 
+                    ", Downlink: " + connection.downlink + " Mbps, " + 
+                    "RTT: " + connection.rtt + " ms";
             }}
 
             // Get screen info
@@ -110,12 +113,12 @@ components.html(f"""
 
             // Get orientation info
             window.addEventListener("deviceorientation", function(event) {{
-                document.getElementById('orientation_info').innerHTML = `Alpha (Z-axis): ${event.alpha}, Beta (X-axis): ${event.beta}, Gamma (Y-axis): ${event.gamma}`;
+                document.getElementById('orientation_info').innerHTML = "Alpha (Z-axis): " + event.alpha + ", Beta (X-axis): " + event.beta + ", Gamma (Y-axis): " + event.gamma;
             }});
 
             // Get motion info
             window.addEventListener("devicemotion", function(event) {{
-                document.getElementById('motion_info').innerHTML = `Acceleration X: ${event.acceleration.x}, Y: ${event.acceleration.y}, Z: ${event.acceleration.z}`;
+                document.getElementById('motion_info').innerHTML = "Acceleration X: " + event.acceleration.x + ", Y: " + event.acceleration.y + ", Z: " + event.acceleration.z;
             }});
 
             // Touch support
