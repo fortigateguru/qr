@@ -3,7 +3,7 @@ import qrcode
 from PIL import Image
 
 # Step 1: Generate QR Code
-url = "https://qrcodeinfo.streamlit.app/"  # Replace this with your actual page URL
+url = "https://qrcodeinfo.streamlit.app"  # Replace this with your actual page URL
 qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
