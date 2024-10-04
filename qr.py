@@ -1,9 +1,10 @@
 import streamlit as st
 import qrcode
 from PIL import Image
+import streamlit.components.v1 as components
 
 # Step 1: Generate QR Code
-url = "https://qrcodeinfo.streamlit.app"  # Replace this with your actual page URL
+url = "https://qrcodeinfo.streamlit.app"  # Your website where the JS will run
 qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -22,42 +23,29 @@ img.save("qr_code.png")
 st.title("Scan the QR Code to Get Device Info")
 st.image(img)
 
-# Step 3: Use JavaScript to pull and display device info
-st.write("""
-    <script>
-        async function getDeviceInfo() {
-            let deviceInfo = {};
+# Step 3: Use components.html to run JS and display device info
+components.html("""
+    <html>
+    <body>
+        <h3>Device Information</h3>
+        <p id="user_agent"></p>
+        <p id="battery_info"></p>
 
+        <script>
             // Get user agent
-            deviceInfo.userAgent = navigator.userAgent;
+            document.getElementById('user_agent').innerHTML = "<strong>User Agent: </strong>" + navigator.userAgent;
 
-            // Get battery info if available
-            if (navigator.getBattery) {
-                let battery = await navigator.getBattery();
-                deviceInfo.battery = {
-                    level: (battery.level * 100) + "%",
-                    charging: battery.charging ? "Yes" : "No"
-                };
+            // Get battery info if supported
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(function(battery) {
+                    var level = battery.level * 100 + "%";
+                    var charging = battery.charging ? "Yes" : "No";
+                    document.getElementById('battery_info').innerHTML = "<strong>Battery Level: </strong>" + level + "<br><strong>Charging: </strong>" + charging;
+                });
+            } else {
+                document.getElementById('battery_info').innerHTML = "<strong>Battery info not supported by this browser.</strong>";
             }
-
-            // Display the info inside the Streamlit page
-            const displayInfo = `
-                <h3>Device Information</h3>
-                <p><strong>User Agent:</strong> ${deviceInfo.userAgent}</p>
-                <p><strong>Battery Level:</strong> ${deviceInfo.battery ? deviceInfo.battery.level : "Not available"}</p>
-                <p><strong>Charging:</strong> ${deviceInfo.battery ? deviceInfo.battery.charging : "Not available"}</p>
-            `;
-            document.getElementById("device_info").innerHTML = displayInfo;
-        }
-
-        // Call the function on page load
-        window.onload = function() {
-            getDeviceInfo();
-        };
-    </script>
-
-    <!-- Placeholder where the device info will be shown -->
-    <div id="device_info">
-        <h3>Loading device info...</h3>
-    </div>
-""", unsafe_allow_html=True)
+        </script>
+    </body>
+    </html>
+    """, height=300)
