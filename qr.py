@@ -16,7 +16,7 @@ def generate_qr_with_logo(url, logo_path):
     img_qr = qr.make_image(fill='black', back_color='white').convert('RGB')
     
     # Open the logo image (Make sure it's small and in PNG format)
-    logo = Image.open(logo_path)
+    logo = Image.open("https://github.com/fortigateguru/qr/blob/main/anonymous-8291223_640.png?raw=true")
     
     # Resize the logo
     logo_size = 50  # Adjust this depending on the size of your QR code
