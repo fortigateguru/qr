@@ -21,7 +21,7 @@ def generate_qr_with_logo(url, logo_url):
     logo = Image.open(io.BytesIO(response.content))
     
     # Resize the logo
-    logo_size = 150  # Adjust this depending on the size of your QR code
+    logo_size = 130  # Adjust this depending on the size of your QR code
     logo = logo.resize((logo_size, logo_size))
     
     # Position the logo at the center of the QR code
