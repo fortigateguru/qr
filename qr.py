@@ -3,8 +3,8 @@ import qrcode
 from PIL import Image
 import streamlit.components.v1 as components
 
-# Step 1: Generate QR Code with Logo in the Center
-def generate_qr_with_logo(url, logo_path):
+# Step 1: Generate Regular QR Code
+def generate_qr_code(url):
     qr = qrcode.QRCode(
         error_correction=qrcode.constants.ERROR_CORRECT_H
     )
@@ -14,15 +14,6 @@ def generate_qr_with_logo(url, logo_path):
     # Create the QR code image
     img_qr = qr.make_image(fill='black', back_color='white')
     
-    # Open the logo image
-    logo = Image.open(logo_path)
-    
-    # Resize the logo and position it at the center of the QR code
-    logo_size = 50
-    logo = logo.resize((logo_size, logo_size))
-    pos = ((img_qr.size[0] - logo_size) // 2, (img_qr.size[1] - logo_size) // 2)
-    img_qr.paste(logo, pos)
-    
     return img_qr
 
 # Step 2: Show QR Code and Instructions
@@ -30,9 +21,8 @@ url = "https://qrcodeinfo.streamlit.app"
 st.title("Scan the QR Code to Get Device Info")
 st.write("Welcome! Scan the QR code below using your smartphone to see what your device shares with the web.")
 
-# Path to logo file (ensure you have a small logo file available)
-logo_path = "your_logo.png"
-qr_code_img = generate_qr_with_logo(url, logo_path)
+# Generate the QR code
+qr_code_img = generate_qr_code(url)
 st.image(qr_code_img, caption="Scan the QR code")
 
 # Step 3: Theme Toggle
