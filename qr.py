@@ -2,6 +2,7 @@ import streamlit as st
 import qrcode
 from PIL import Image
 import streamlit.components.v1 as components
+import io
 
 # Step 1: Generate Regular QR Code
 def generate_qr_code(url):
@@ -14,7 +15,12 @@ def generate_qr_code(url):
     # Create the QR code image
     img_qr = qr.make_image(fill='black', back_color='white')
     
-    return img_qr
+    # Convert the image to BytesIO for displaying in Streamlit
+    img_byte_arr = io.BytesIO()
+    img_qr.save(img_byte_arr, format='PNG')
+    img_byte_arr = img_byte_arr.getvalue()
+    
+    return img_byte_arr
 
 # Step 2: Show QR Code and Instructions
 url = "https://qrcodeinfo.streamlit.app"
@@ -23,7 +29,7 @@ st.write("Welcome! Scan the QR code below using your smartphone to see what your
 
 # Generate the QR code
 qr_code_img = generate_qr_code(url)
-st.image(qr_code_img, caption="Scan the QR code")
+st.image(qr_code_img, caption="Scan the QR code", use_column_width=True)
 
 # Step 3: Theme Toggle
 theme = st.radio("Choose a theme", ("Light", "Dark"))
