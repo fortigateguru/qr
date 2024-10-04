@@ -47,7 +47,18 @@ logo_url = "https://github.com/fortigateguru/qr/blob/main/anonymous-8291223_640.
 qr_code_img = generate_qr_with_logo(url, logo_url)
 st.image(qr_code_img, caption="Scan the QR code", use_column_width=True)
 
-# Step 3: Use components.html to run JS and display device info and fingerprinting
+# Step 3: Countdown Timer for Data Collection
+import time
+
+with st.spinner("Collecting device info in 5 seconds..."):
+    countdown_time = 5
+    for i in range(countdown_time, 0, -1):
+        st.write(f"Collecting data in {i} seconds...")
+        time.sleep(1)
+
+st.success("Data collection complete! Now displaying your device info...")
+
+# Step 4: Use components.html to run JS and display device info and fingerprinting
 components.html(f"""
     <html>
     <head>
