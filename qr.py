@@ -3,7 +3,7 @@ import qrcode
 from PIL import Image
 
 # Step 1: Generate QR Code
-url = "https://datacompare.net"  # Your website where the JS will run
+url = "https://qrcodeinfo.streamlit.app/"  # Your website where the JS will run
 qr = qrcode.QRCode(
     version=1,
     error_correction=qrcode.constants.ERROR_CORRECT_L,
