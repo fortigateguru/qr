@@ -2,10 +2,10 @@ import streamlit as st
 import qrcode
 from PIL import Image
 import io
-import streamlit.components.v1 as components
+import requests
 
-# Step 1: Generate QR Code with Logo
-def generate_qr_with_logo(url, logo_path):
+# Step 1: Generate QR Code with Logo from URL
+def generate_qr_with_logo(url, logo_url):
     qr = qrcode.QRCode(
         error_correction=qrcode.constants.ERROR_CORRECT_H
     )
@@ -15,8 +15,9 @@ def generate_qr_with_logo(url, logo_path):
     # Create the QR code image
     img_qr = qr.make_image(fill='black', back_color='white').convert('RGB')
     
-    # Open the logo image (Make sure it's small and in PNG format)
-    logo = Image.open("https://github.com/fortigateguru/qr/blob/main/anonymous-8291223_640.png?raw=true")
+    # Fetch the logo image from the URL
+    response = requests.get(logo_url)
+    logo = Image.open(io.BytesIO(response.content))
     
     # Resize the logo
     logo_size = 50  # Adjust this depending on the size of your QR code
@@ -38,11 +39,11 @@ url = "https://qrcodeinfo.streamlit.app/"  # Updated Streamlit app URL
 st.title("Scan the QR Code to Get Device Info")
 st.write("Scan the QR code below using your smartphone to see what your device shares with the web.")
 
-# Path to your logo file
-logo_path = "your_logo.png"  # Make sure your logo is a PNG file with transparency
+# URL to your logo file
+logo_url = "https://github.com/fortigateguru/qr/blob/main/anonymous-8291223_640.png?raw=true"  # URL to your logo
 
-# Generate the QR code with logo
-qr_code_img = generate_qr_with_logo(url, logo_path)
+# Generate the QR code with logo from URL
+qr_code_img = generate_qr_with_logo(url, logo_url)
 st.image(qr_code_img, caption="Scan the QR code", use_column_width=True)
 
 # Step 3: Use components.html to run JS and display device info
