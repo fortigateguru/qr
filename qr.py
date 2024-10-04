@@ -47,7 +47,7 @@ logo_url = "https://github.com/fortigateguru/qr/blob/main/anonymous-8291223_640.
 qr_code_img = generate_qr_with_logo(url, logo_url)
 st.image(qr_code_img, caption="Scan the QR code", use_column_width=True)
 
-# Step 3: Use components.html to run JS and display device info
+# Step 3: Use components.html to run JS and display device info and fingerprinting
 components.html(f"""
     <html>
     <head>
@@ -90,56 +90,46 @@ components.html(f"""
         </div>
 
         <div class="card">
-            <strong>Orientation Info:</strong>
-            <p id="orientation_info"></p>
-        </div>
-
-        <div class="card">
-            <strong>Motion Info:</strong>
-            <p id="motion_info"></p>
-        </div>
-
-        <div class="card">
-            <strong>Touch Support:</strong>
-            <p id="touch_support"></p>
+            <strong>Fingerprinting Risk:</strong>
+            <p id="fingerprint_info"></p>
         </div>
 
         <script>
             // Get user agent
-            document.getElementById('user_agent').innerHTML = navigator.userAgent;
+            let userAgent = navigator.userAgent;
+            document.getElementById('user_agent').innerHTML = userAgent;
 
             // Get battery info if supported
+            let batteryInfo = "Battery info not available";
             if ('getBattery' in navigator) {{
                 navigator.getBattery().then(function(battery) {{
-                    document.getElementById('battery_info').innerHTML = "Level: " + (battery.level * 100) + "%, Charging: " + (battery.charging ? "Yes" : "No");
+                    batteryInfo = "Level: " + (battery.level * 100) + "%, Charging: " + (battery.charging ? "Yes" : "No");
+                    document.getElementById('battery_info').innerHTML = batteryInfo;
                 }});
             }}
 
             // Get network info
+            let networkInfo = "Network info not available";
             if ('connection' in navigator) {{
                 let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                document.getElementById('network_info').innerHTML = 
-                    "Effective Type: " + connection.effectiveType + 
-                    ", Downlink: " + connection.downlink + " Mbps, " + 
-                    "RTT: " + connection.rtt + " ms";
+                networkInfo = "Effective Type: " + connection.effectiveType + 
+                              ", Downlink: " + connection.downlink + " Mbps, " + 
+                              "RTT: " + connection.rtt + " ms";
+                document.getElementById('network_info').innerHTML = networkInfo;
             }}
 
             // Get screen info
-            document.getElementById('screen_info').innerHTML = window.screen.width + "x" + window.screen.height + ", " + window.screen.colorDepth + " bits";
+            let screenInfo = window.screen.width + "x" + window.screen.height + ", " + window.screen.colorDepth + " bits";
+            document.getElementById('screen_info').innerHTML = screenInfo;
 
-            // Get orientation info
-            window.addEventListener("deviceorientation", function(event) {{
-                document.getElementById('orientation_info').innerHTML = "Alpha (Z-axis): " + event.alpha + ", Beta (X-axis): " + event.beta + ", Gamma (Y-axis): " + event.gamma;
-            }});
+            // Combine data for fingerprinting
+            function generateFingerprint() {{
+                return userAgent + ", " + batteryInfo + ", " + networkInfo + ", " + screenInfo;
+            }}
 
-            // Get motion info
-            window.addEventListener("devicemotion", function(event) {{
-                document.getElementById('motion_info').innerHTML = "Acceleration X: " + event.acceleration.x + ", Y: " + event.acceleration.y + ", Z: " + event.acceleration.z;
-            }});
-
-            // Touch support
-            let touchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-            document.getElementById('touch_support').innerHTML = touchSupport ? "Yes" : "No";
+            // Simulate fingerprinting by combining all collected data
+            let fingerprint = generateFingerprint();
+            document.getElementById('fingerprint_info').innerHTML = "This combination of data can be used to uniquely identify your device: " + fingerprint;
 
             // Hide loading message after info is loaded
             document.getElementById('loading_message').style.display = "none";
