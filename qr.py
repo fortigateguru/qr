@@ -3,7 +3,7 @@ import qrcode
 from PIL import Image
 import io
 import requests
-import streamlit.components.v1 as components  # Ensure this import is present
+import streamlit.components.v1 as components
 
 # Step 1: Generate QR Code with Logo from URL
 def generate_qr_with_logo(url, logo_url):
@@ -21,12 +21,12 @@ def generate_qr_with_logo(url, logo_url):
     logo = Image.open(io.BytesIO(response.content))
     
     # Resize the logo
-    logo_size = 130  # Adjust this depending on the size of your QR code
+    logo_size = 130
     logo = logo.resize((logo_size, logo_size))
     
     # Position the logo at the center of the QR code
     pos = ((img_qr.size[0] - logo_size) // 2, (img_qr.size[1] - logo_size) // 2)
-    img_qr.paste(logo, pos, mask=logo)  # Use the logo as a mask for transparency
+    img_qr.paste(logo, pos, mask=logo)
     
     # Convert the image to BytesIO for displaying in Streamlit
     img_byte_arr = io.BytesIO()
@@ -36,12 +36,12 @@ def generate_qr_with_logo(url, logo_url):
     return img_byte_arr
 
 # Step 2: Show QR Code and Instructions
-url = "https://qrcodeinfo.streamlit.app/"  # Updated Streamlit app URL
+url = "https://qrcodeinfo.streamlit.app/"
 st.title("Scan the QR Code to Get Device Info")
 st.write("Scan the QR code below using your smartphone to see what your device shares with the web.")
 
 # URL to your logo file
-logo_url = "https://github.com/fortigateguru/qr/blob/main/anonymous-8291223_640.png?raw=true"  # URL to your logo
+logo_url = "https://github.com/fortigateguru/qr/blob/main/anonymous-8291223_640.png?raw=true"
 
 # Generate the QR code with logo from URL
 qr_code_img = generate_qr_with_logo(url, logo_url)
@@ -58,7 +58,7 @@ with st.spinner("Collecting device info in 5 seconds..."):
 
 st.success("Data collection complete! Now displaying your device info...")
 
-# Step 4: Use components.html to run JS and display device info and fingerprinting
+# Step 4: Use components.html to run JS and display device info, set cookies and fingerprinting
 components.html(f"""
     <html>
     <head>
@@ -105,6 +105,11 @@ components.html(f"""
             <p id="fingerprint_info"></p>
         </div>
 
+        <div class="card">
+            <strong>Cookie Info:</strong>
+            <p id="cookie_info"></p>
+        </div>
+
         <script>
             // Get user agent
             let userAgent = navigator.userAgent;
@@ -141,6 +146,10 @@ components.html(f"""
             // Simulate fingerprinting by combining all collected data
             let fingerprint = generateFingerprint();
             document.getElementById('fingerprint_info').innerHTML = "This combination of data can be used to uniquely identify your device: " + fingerprint;
+
+            // Set a cookie (simulating tracking behavior)
+            document.cookie = "trackingID=123456; SameSite=None; Secure";
+            document.getElementById('cookie_info').innerHTML = "Cookie set: " + document.cookie;
 
             // Hide loading message after info is loaded
             document.getElementById('loading_message').style.display = "none";
