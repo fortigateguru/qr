@@ -58,7 +58,7 @@ with st.spinner("Collecting device info in 5 seconds..."):
 
 st.success("Data collection complete! Now displaying your device info...")
 
-# Step 4: Use components.html to run JS and display device info, set cookies and fingerprinting
+# Step 4: Use components.html to run JS and display device info, set cookies, and display the cookie value
 components.html(f"""
     <html>
     <head>
@@ -147,7 +147,7 @@ components.html(f"""
             let fingerprint = generateFingerprint();
             document.getElementById('fingerprint_info').innerHTML = "This combination of data can be used to uniquely identify your device: " + fingerprint;
 
-            // Set a cookie (simulating tracking behavior)
+            // Set a first-party cookie (simulating tracking behavior)
             document.cookie = "trackingID=123456; SameSite=None; Secure";
             document.getElementById('cookie_info').innerHTML = "Cookie set: " + document.cookie;
 
