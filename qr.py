@@ -35,30 +35,30 @@ def generate_qr_with_logo(url, logo_url):
     
     return img_byte_arr
 
-# Step 2: Show QR Code and Instructions
+# Step 2: Show QR Code and Instructions (In Hebrew)
 url = "https://qrcodeinfo.streamlit.app/"
-st.title("Scan the QR Code to Get Device Info")
-st.write("Scan the QR code below using your smartphone to see what your device shares with the web.")
+st.title("סרוק את קוד ה-QR כדי לקבל מידע על המכשיר שלך")
+st.write("סרוק את קוד ה-QR בעזרת הסמארטפון שלך כדי לראות איזה מידע המכשיר שלך משתף עם האתר.")
 
 # URL to your logo file
 logo_url = "https://github.com/fortigateguru/qr/blob/main/anonymous-8291223_640.png?raw=true"
 
 # Generate the QR code with logo from URL
 qr_code_img = generate_qr_with_logo(url, logo_url)
-st.image(qr_code_img, caption="Scan the QR code", use_column_width=True)
+st.image(qr_code_img, caption="סרוק את קוד ה-QR", use_column_width=True)
 
-# Step 3: Countdown Timer for Data Collection
+# Step 3: Countdown Timer for Data Collection (In Hebrew)
 import time
 
-with st.spinner("Collecting device info in 5 seconds..."):
+with st.spinner("אוסף מידע על המכשיר בעוד 5 שניות..."):
     countdown_time = 5
     for i in range(countdown_time, 0, -1):
-        st.write(f"Collecting data in {i} seconds...")
+        st.write(f"אוסף מידע בעוד {i} שניות...")
         time.sleep(1)
 
-st.success("Data collection complete! Now displaying your device info...")
+st.success("איסוף המידע הושלם! מציג כעת את המידע על המכשיר שלך...")
 
-# Step 4: Use components.html to run JS and display device info, set cookies, and display the cookie value
+# Step 4: Use components.html to run JS and display device info, set cookies, and display the cookie value (In Hebrew)
 components.html(f"""
     <html>
     <head>
@@ -78,35 +78,35 @@ components.html(f"""
         </style>
     </head>
     <body>
-        <div class="loading" id="loading_message">Fetching your device info...</div>
+        <div class="loading" id="loading_message">אוסף מידע על המכשיר שלך...</div>
 
         <div class="card">
-            <strong>User Agent:</strong>
+            <strong>סוכן המשתמש (User Agent):</strong>
             <p id="user_agent"></p>
         </div>
 
         <div class="card">
-            <strong>Battery Info:</strong>
+            <strong>מידע על הסוללה:</strong>
             <p id="battery_info"></p>
         </div>
 
         <div class="card">
-            <strong>Network Info:</strong>
+            <strong>מידע על הרשת:</strong>
             <p id="network_info"></p>
         </div>
 
         <div class="card">
-            <strong>Screen Info:</strong>
+            <strong>מידע על המסך:</strong>
             <p id="screen_info"></p>
         </div>
 
         <div class="card">
-            <strong>Fingerprinting Risk:</strong>
+            <strong>סיכון לזיהוי באמצעות טביעת אצבע דיגיטלית:</strong>
             <p id="fingerprint_info"></p>
         </div>
 
         <div class="card">
-            <strong>Cookie Info:</strong>
+            <strong>מידע על העוגיות:</strong>
             <p id="cookie_info"></p>
         </div>
 
@@ -116,26 +116,26 @@ components.html(f"""
             document.getElementById('user_agent').innerHTML = userAgent;
 
             // Get battery info if supported
-            let batteryInfo = "Battery info not available";
+            let batteryInfo = "מידע על הסוללה לא זמין";
             if ('getBattery' in navigator) {{
                 navigator.getBattery().then(function(battery) {{
-                    batteryInfo = "Level: " + (battery.level * 100) + "%, Charging: " + (battery.charging ? "Yes" : "No");
+                    batteryInfo = "רמת הסוללה: " + (battery.level * 100) + "%, בטעינה: " + (battery.charging ? "כן" : "לא");
                     document.getElementById('battery_info').innerHTML = batteryInfo;
                 }});
             }}
 
             // Get network info
-            let networkInfo = "Network info not available";
+            let networkInfo = "מידע על הרשת לא זמין";
             if ('connection' in navigator) {{
                 let connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-                networkInfo = "Effective Type: " + connection.effectiveType + 
-                              ", Downlink: " + connection.downlink + " Mbps, " + 
-                              "RTT: " + connection.rtt + " ms";
+                networkInfo = "סוג רשת: " + connection.effectiveType + 
+                              ", קצב הורדה: " + connection.downlink + " Mbps, " + 
+                              "זמן תגובה: " + connection.rtt + " ms";
                 document.getElementById('network_info').innerHTML = networkInfo;
             }}
 
             // Get screen info
-            let screenInfo = window.screen.width + "x" + window.screen.height + ", " + window.screen.colorDepth + " bits";
+            let screenInfo = window.screen.width + "x" + window.screen.height + ", " + window.screen.colorDepth + " סיביות";
             document.getElementById('screen_info').innerHTML = screenInfo;
 
             // Combine data for fingerprinting
@@ -145,11 +145,11 @@ components.html(f"""
 
             // Simulate fingerprinting by combining all collected data
             let fingerprint = generateFingerprint();
-            document.getElementById('fingerprint_info').innerHTML = "This combination of data can be used to uniquely identify your device: " + fingerprint;
+            document.getElementById('fingerprint_info').innerHTML = "השילוב של המידע הזה יכול לשמש לזיהוי ייחודי של המכשיר שלך: " + fingerprint;
 
             // Set a first-party cookie (simulating tracking behavior)
             document.cookie = "trackingID=123456; SameSite=None; Secure";
-            document.getElementById('cookie_info').innerHTML = "Cookie set: " + document.cookie;
+            document.getElementById('cookie_info').innerHTML = "הוגדרה עוגיה: " + document.cookie;
 
             // Hide loading message after info is loaded
             document.getElementById('loading_message').style.display = "none";
